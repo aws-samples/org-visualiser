@@ -7,7 +7,8 @@ A tool to visualise the AWS OU and account structure for a given org.
 If you have many accounts and OUs it might be hard to have a picture of it in your head. This tools helps build a visualisation
 
 ## __3. Example__
-Here is how a visualisation could look  
+Here is how a visualisation could look. This is, of course, a very simple set up with 2 OUs and 4 accounts, but for orgs that have hundreds or thousands of accounts, this would help get a bird's eye view of how their accounts are structured.
+
 ![Visualisation Example](OrgStructureExample.png)
 
 ## __4. How to use it__
