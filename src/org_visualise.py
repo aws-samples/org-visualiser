@@ -5,6 +5,8 @@ import boto3
 import networkx as nx
 from pyvis.network import Network
 import config
+import os
+
 from config import log_func
 from config import logging
 
@@ -168,6 +170,8 @@ class OrgVisualiser:
         nt.from_nx(self.G)
         if config.show_options:
             nt.show_buttons()
+        
+        os.makedirs(os.path.dirname(config.output_file_name), exist_ok=True)
         nt.show(config.output_file_name)
 
     @log_func

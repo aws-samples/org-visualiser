@@ -36,9 +36,9 @@ parser.add_argument('-d', '--depth', metavar='depth', choices = ['ou','account']
                     help='Indicate if the depth should be only upto the "ou" or all the way to the "account" level. Default is "account"',
                     default = 'account')
 parser.add_argument('-o', '--output', metavar='output_file_name', dest='output_file_name',
-                    default='output.html',
+                    default='output/output.html',
                     type=regex_validator_generator(regex = r".+\.html+$", desc_param_name = "Output file name", custom_message = "Please make sure it ends with '.html'"),
-                    help='Name of the html file to which the output will be written to. Please include the suffix ".html" in the filename. Default is output.html')
+                    help='Name of the html file to which the output will be written to (you can include the path too. Either relative to the current folder or the absolute path). Please include the suffix ".html" in the filename. Default is output/output.html')
 parser.add_argument('--dark-mode', action='store_true', dest='dark_mode',
                     default=False,
                     help="Use this option if you want the visualization with a black background. Default is False")
