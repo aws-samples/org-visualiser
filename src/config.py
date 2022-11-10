@@ -4,6 +4,16 @@
 import argparse
 import logging
 import re 
+from datetime import datetime, date
+
+def json_serialise(obj):
+    if isinstance(obj, datetime):
+        return obj.strftime("%Y-%m-%d, %H:%M:%S %Z")
+    elif isinstance(obj, date):
+        return obj.strftime("%Y-%m-%d %Z")
+    else:
+        raise TypeError (f"Type {type(obj)} not serializable")
+
 
 #Reference: https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_iam-quotas.html
 

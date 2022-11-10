@@ -6,9 +6,12 @@ import networkx as nx
 from pyvis.network import Network
 import config
 import os
+import json
+import copy
 
 from config import log_func
 from config import logging
+
 
 class OrgVisualiser:
     #Contain the accounts and OUs in an array of dicts. Each dict will represent an account or an OU
@@ -109,12 +112,15 @@ class OrgVisualiser:
                 node['Name'] = ou_name
                 node['color'] = config.OU_colors[node['Depth']]
                 node['shape'] = config.OU_shape
+                node['title'] = json.dumps(response['OrganizationalUnit'],  default = config.json_serialise, indent = 4)
             elif node['Type'] == 'ACCOUNT':
                 response = self.org_client.describe_account(AccountId = node['Id'])
                 node['Name'] = response['Account']['Name']
                 node['Status'] = response['Account']['Status']
                 node['color'] = config.account_color
                 node['shape'] = config.account_shape
+                print(str(response['Account']))
+                node['title'] = json.dumps(response['Account'],  default = config.json_serialise, indent = 4)
             else: #Root
                 org = self.org_client.describe_organization()
                 mgmt_account_id = org['Organization']['MasterAccountId']
@@ -125,8 +131,9 @@ class OrgVisualiser:
                 node['color'] = config.root_OU_color
                 node['shape'] = config.OU_shape
                 node['value'] = config.root_OU_size
+                node['title'] = json.dumps(response['Account'],  default = config.json_serialise, indent = 4)
             node['label'] = node['Name']
-            node['title'] = node['Id']
+
 
     @log_func
     def create_graph(self):
