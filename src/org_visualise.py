@@ -78,7 +78,6 @@ class OrgVisualiser:
     #This is a recursive function that keeps digging deeper until it reachest the leaf OUs and adds the OUs to the nodes[] list. This function is invoked once for every OU.
     #Once child OUs are found, the child accounts are added to the nodes[] list
     def add_descendents(self, parent_id, depth = 0):
-        children = []
 
         #First get OUs and keep recursing until you reach the leaf OU
         response = self.org_client.list_children(ParentId=parent_id, ChildType = 'ORGANIZATIONAL_UNIT')
@@ -87,8 +86,8 @@ class OrgVisualiser:
             self.add_descendents(child['Id'], depth+1)
         #Check for any NextToken values and if so, fetch more child OUs
         while ('NextToken' in response):
-            children = self.org_client.list_children(ParentId=parent_id, ChildType = 'ORGANIZATIONAL_UNIT', NextToken = children['NextToken'])
-            for child in children['Children']:
+            response = self.org_client.list_children(ParentId=parent_id, ChildType = 'ORGANIZATIONAL_UNIT', NextToken = response['NextToken'])
+            for child in response['Children']:
                 self.nodes.append({'Id':child['Id'], 'Type':'ORGANIZATIONAL_UNIT', 'ParentId':parent_id, 'Depth' : depth+1})
                 self.add_descendents(child['Id'], depth+1)
         
@@ -98,8 +97,8 @@ class OrgVisualiser:
             self.nodes.append({'Id':child['Id'], 'Type':'ACCOUNT', 'ParentId':parent_id, 'Depth' : depth+1})
         #Check for any NextToken values and if so, fetch more child accounts
         while ('NextToken' in response):
-            children = self.org_client.list_children(ParentId=parent_id, ChildType = 'ACCOUNT', NextToken = children['NextToken'])
-            for child in children['Children']:
+            response = self.org_client.list_children(ParentId=parent_id, ChildType = 'ACCOUNT', NextToken = response['NextToken'])
+            for child in response['Children']:
                 self.nodes.append({'Id':child['Id'], 'Type':'ACCOUNT', 'ParentId':parent_id, 'Depth' : depth+1})
 
     @log_func
@@ -119,7 +118,6 @@ class OrgVisualiser:
                 node['Status'] = response['Account']['Status']
                 node['color'] = config.account_color
                 node['shape'] = config.account_shape
-                print(str(response['Account']))
                 node['title'] = json.dumps(response['Account'],  default = config.json_serialise, indent = 4)
             else: #Root
                 org = self.org_client.describe_organization()
